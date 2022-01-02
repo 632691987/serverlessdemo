@@ -1,0 +1,44 @@
+service: serverlessdemo
+
+frameworkVersion: '2 || 3'
+
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
+  stage: v1
+  region: eu-west-3
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: /hello
+          method: GET
+          cors: true
+      - http:
+          path: /json
+          method: POST
+          cors: true
+
+resources: # CloudFormation template syntax
+  Resources:
+    newsTable: # this is not table name, this is resource name
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: newsTable
+        AttributeDefinitions:
+          - AttributeName: guid
+            AttributeType: S
+          - AttributeName: pubdate
+            AttributeType: N
+        KeySchema:
+          - AttributeName: guid
+            KeyType: HASH
+          - AttributeName: pubdate
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
