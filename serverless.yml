@@ -10,6 +10,15 @@ provider:
   stage: v1
   region: eu-west-3
 
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 'dynamodb:*'
+          Resource:
+            - 'arn:aws:dynamodb:eu-west-3:232100206199:table/*'
+
 functions:
   hello:
     handler: handler.hello

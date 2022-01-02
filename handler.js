@@ -1,25 +1,38 @@
 'use strict';
 
-// https://github.com/middyjs/middy 专门为 lambda 定制的
-
 const { v4: uuidv4 } = require('uuid');
-var createError = require('http-errors');
-
 const middy = require('@middy/core');
 const httpErrorHandler = require('@middy/http-error-handler');
 const httpJsonBodyParser = require('@middy/http-json-body-parser');
 
+const {
+    DynamoDBClient,
+    ListTablesCommand,
+    QueryCommand,
+    PutItemCommand,
+    GetItemCommand,
+    ScanCommand,
+} = require("@aws-sdk/client-dynamodb");
+const dynamoDBClient = new DynamoDBClient();
+
+const listTablesCommand = async () => {
+    let data = {}
+    const params = {
+    }
+    const command = new ListTablesCommand(params);
+    data = await dynamoDBClient.send(command);
+
+    return data
+}
+
 module.exports.hello = middy(async (event, context) => {
-  const req_body = event.body
-  
-  return {
-      statusCode: 200,
-      body: JSON.stringify({
-          uuid: uuidv4(),
-          body: req_body,
-          req_body_type: typeof req_body,
-      }, null, 2)
-  }
-})
-.use(httpErrorHandler())
-.use(httpJsonBodyParser());
+    const result_data = await listTablesCommand()
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            uuid: uuidv4(),
+            body: result_data.TableNames,
+        }),
+    }
+}).use(httpErrorHandler()).use(httpJsonBodyParser());
