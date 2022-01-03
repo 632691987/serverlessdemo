@@ -13,6 +13,16 @@ provider:
     role: ${file(iam/IAMRole.yml):role}
 
 functions:
+  envstudy:
+    handler: handler.envstudy
+    environment:
+      CONTEXT_AUTHOR_NAME: Vincent
+    events:
+      - http:
+          path: /envstudy
+          method: GET
+          cors: true
+  
   hello:
     handler: handler.hello
     environment:

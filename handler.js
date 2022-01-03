@@ -39,3 +39,16 @@ module.exports.hello = middyCommon(async (event, context) => {
         }),
     };
 });
+
+
+module.exports.envstudy = middyCommon(async (event, context) => {
+    const author = process.env.CONTEXT_AUTHOR_NAME;
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            uuid: uuidv4(),
+            message: 'My name is ' + author
+        }),
+    };
+});
