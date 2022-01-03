@@ -1,0 +1,17 @@
+newsTable: # this is not table name, this is resource name
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: newsTable
+    AttributeDefinitions:
+      - AttributeName: guid
+        AttributeType: S
+      - AttributeName: pubdate
+        AttributeType: N
+    KeySchema:
+      - AttributeName: guid
+        KeyType: HASH
+      - AttributeName: pubdate
+        KeyType: RANGE
+    ProvisionedThroughput:
+      ReadCapacityUnits: 5
+      WriteCapacityUnits: 5

@@ -32,6 +32,7 @@ module.exports.hello = middy(async (event, context) => {
         statusCode: 200,
         body: JSON.stringify({
             uuid: uuidv4(),
+            message: 'this is version 1',
             body: result_data.TableNames,
         }),
     }

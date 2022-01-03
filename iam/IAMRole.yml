@@ -1,0 +1,7 @@
+role:
+  statements:
+    - Effect: 'Allow'
+      Action:
+        - 'dynamodb:*'
+      Resource:
+        - 'arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/*'

@@ -9,15 +9,8 @@ provider:
   lambdaHashingVersion: 20201221
   stage: v1
   region: eu-west-3
-
   iam:
-    role:
-      statements:
-        - Effect: 'Allow'
-          Action:
-            - 'dynamodb:*'
-          Resource:
-            - 'arn:aws:dynamodb:eu-west-3:232100206199:table/*'
+    role: ${file(iam/IAMRole.yml):role}
 
 functions:
   hello:
@@ -34,20 +27,4 @@ functions:
 
 resources: # CloudFormation template syntax
   Resources:
-    newsTable: # this is not table name, this is resource name
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: newsTable
-        AttributeDefinitions:
-          - AttributeName: guid
-            AttributeType: S
-          - AttributeName: pubdate
-            AttributeType: N
-        KeySchema:
-          - AttributeName: guid
-            KeyType: HASH
-          - AttributeName: pubdate
-            KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
+    newsTable: ${file(tables/newsTable.yml):newsTable}
