@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const middy = require('@middy/core');
 const httpErrorHandler = require('@middy/http-error-handler');
 const httpJsonBodyParser = require('@middy/http-json-body-parser');
+const middyCommon = require('./middyCommon');
 
 const {
     DynamoDBClient,
@@ -25,15 +26,16 @@ const listTablesCommand = async () => {
     return data
 }
 
-module.exports.hello = middy(async (event, context) => {
-    const result_data = await listTablesCommand()
+module.exports.hello = middyCommon(async (event, context) => {
+    const result_data = await listTablesCommand();
+    const tablename = process.env.DYNAMODB_TABLE_NEWS;
 
     return {
         statusCode: 200,
         body: JSON.stringify({
             uuid: uuidv4(),
-            message: 'this is version 1',
+            message: 'this is version v2, table name =' + tablename,
             body: result_data.TableNames,
         }),
-    }
-}).use(httpErrorHandler()).use(httpJsonBodyParser());
+    };
+});
