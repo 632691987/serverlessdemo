@@ -9,10 +9,26 @@ provider:
   lambdaHashingVersion: 20201221
   stage: v1
   region: eu-west-3
+  environment:
+    DYNAMODB_TABLE_NEWS: ${self:custom.newsTable.name}
   iam:
     role: ${file(iam/IAMRole.yml):role}
 
 functions:
+  newslist:
+    handler: handlerDynamoDB.newslist
+    events:
+      - http:
+          path: /newslist
+          method: GET
+          cors: true
+  insertNews:
+    handler: handlerDynamoDB.insertNews
+    events:
+      - http:
+          path: /news
+          method: POST
+          cors: true
   envstudy:
     handler: handler.envstudy
     environment:
@@ -40,3 +56,7 @@ functions:
 resources: # CloudFormation template syntax
   Resources:
     newsTable: ${file(tables/newsTable.yml):newsTable}
+
+custom:
+  newsTable:
+    name: 'newsTable'

@@ -1,7 +1,7 @@
 newsTable: # this is not table name, this is resource name
   Type: AWS::DynamoDB::Table
   Properties:
-    TableName: newsTable
+    TableName: ${self:custom.newsTable.name}
     AttributeDefinitions:
       - AttributeName: guid
         AttributeType: S
